@@ -1,9 +1,6 @@
-// src/main.ts
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-// Import Swagger classes
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -17,15 +14,27 @@ async function bootstrap() {
     .setTitle('Pharmacy Management API')
     .setDescription('API documentation for the multi-tenant pharmacy management system')
     .setVersion('1.0')
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'x-tenant-id', // The name of the header
+        in: 'header',
+        description: 'The tenant ID for the request',
+      },
+      'x-tenant-id', // A name for this security scheme
+    )
     .addBearerAuth() // Essential for testing authenticated routes
-    .addServer(`http://localhost:${port}`, 'Local Development')
-    .addTag('Tenants', 'Endpoints for company registration')
-    .addTag('Authentication', 'Endpoints for user login')
-    .addTag('Products', 'Endpoints for managing products (requires auth)')
+    .addServer('http://localhost:8080', 'Local Development Server')
+    // Add global headers
+    .addSecurityRequirements('x-tenant-id')
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document); // This sets up Swagger on the '/api-docs' route
+   SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   await app.listen(port);
 }
