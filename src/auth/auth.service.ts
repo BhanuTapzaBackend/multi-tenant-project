@@ -52,7 +52,7 @@ export class AuthService {
     //Encrypt the Secret Key
     const encryptedSecret = encrypt(
       jwtSecret,
-      this.configService.get(`security.encryptionSecretKey`),
+      this.configService.get(`security.encryptionSecretKey`, '+3141TPPcFqBdfxx2KM1aT31CMtmGG4MbvbR22+ytj0='),
     );
 
     //Get Access to the tenant specific Model
@@ -80,7 +80,7 @@ export class AuthService {
     const secretsDoc = await SecretsModel.findOne();
     const secretKey = decrypt(
       secretsDoc.jwtSecret,
-      this.configService.get<string>(`security.encryptionSecretKey`),
+      this.configService.get(`security.encryptionSecretKey`, '+3141TPPcFqBdfxx2KM1aT31CMtmGG4MbvbR22+ytj0='),
     );
     return secretKey;
   }

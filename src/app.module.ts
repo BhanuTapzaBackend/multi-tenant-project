@@ -9,7 +9,8 @@ import config from './config/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
-import { TenentModule } from './tenants/tenant.module';
+import { TenantsModule } from './tenants/tenants.module';
+
 
 @Module({imports: [
     ConfigModule.forRoot({
@@ -27,7 +28,7 @@ import { TenentModule } from './tenants/tenant.module';
       }),
       inject: [ConfigService],
     }),
-    TenentModule,
+    TenantsModule,
     ProductsModule,
     UsersModule,
     AuthModule,
